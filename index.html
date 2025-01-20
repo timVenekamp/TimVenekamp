@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sint Helena Plan</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Include Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/loaders/GLTFLoader.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- Menu Button -->
+        <nav id="menu">
+            <button id="menu-button">☰ Menu</button>
+            <ul id="menu-items" class="hidden">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="image1.html">Image 1 Details</a></li>
+                <li><a href="image2.html">Image 2 Details</a></li>
+                <li><a href="image3.html">Image 3 Details</a></li>
+                <li><a href="image4.html">Image 4 Details</a></li>
+                <li><a href="image5.html">Image 5 Details</a></li>
+            </ul>
+        </nav>
+        <h1>Sint Helena Plan</h1>
+    </header>
+
+    <main>
+        <section id="map-section">
+            <h2>Kaart Der Vernietiging</h2>
+            <div id="map-container">
+                <!-- Embedded Google My Map -->
+                <iframe id="map-frame" src="https://www.google.com/maps/d/u/0/embed?mid=1uHV1jjTTuz-wFHA4noPAw1fIQJSKr_Q&ehbc=2E312F&noprof=1&amp;t=k&z=16&amp" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <section id="about">
+            <h2>About the Sint Helena Plan</h2>
+            <p>Discover the beauty and history of Sint Helena with our interactive map. Plan your visit or learn more about this unique island.</p>
+        </section>
+
+        <!-- Image Gallery Section -->
+        <section id="gallery">
+            <h2>Image Gallery</h2>
+            <div class="gallery">
+                <a href="image1.html"><img src="images/IMG_1.jpg" alt="Beautiful view of Sint Helena" class="gallery-item"></a>
+                <a href="image2.html"><img src="images/IMG_2.jpg" alt="Historic site on Sint Helena" class="gallery-item"></a>
+                <a href="image3.html"><img src="images/IMG_3.jpg" alt="Natural scenery of Sint Helena" class="gallery-item"></a>
+                <a href="image4.html"><img src="images/IMG_4.jpg" alt="Natural scenery of Sint Helena" class="gallery-item"></a>
+                <a href="image5.html"><img src="images/IMG_5.jpg" alt="Natural scenery of Sint Helena" class="gallery-item"></a>
+            </div>
+        </section>
+
+        <!-- 3D Viewer Section -->
+        <section id="viewer-section">
+            <h2>3D Model Viewer</h2>
+            <div id="viewer-container"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Sint Helena Plan - All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Menu toggle functionality
+        const menuButton = document.getElementById('menu-button');
+        const menuItems = document.getElementById('menu-items');
+        
+        menuButton.addEventListener('click', () => {
+            if (menuItems.classList.contains('hidden')) {
+                menuItems.classList.remove('hidden'); // Show menu
+            } else {
+                menuItems.classList.add('hidden'); // Hide menu
+            }
+        });
+
+        // 3D Viewer Setup
+        const viewerContainer = document.getElementById('viewer-container');
+
+        // Scene, camera, and renderer setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, viewerContainer.offsetWidth / 500, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(viewerContainer.offsetWidth, 500);
+        viewerContainer.appendChild(renderer.domElement);
+
+        // Add lighting
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(5, 10, 7.5);
+        scene.add(light);
+
+        // Load the 3D model (replace 'path/to/model.glb' with your actual model path)
+        const loader = new THREE.GLTFLoader();
+        loader.load('Images/model1.glb', (glb) => {
+            const model = gltf.scene;
+            model.scale.set(2, 2, 2); // Adjust the size of the model
+            scene.add(model);
+
+            // Optional: Rotate model for a spinning effect
+            const animate = () => {
+                requestAnimationFrame(animate);
+                model.rotation.y += 0.01; // Rotate model
+                renderer.render(scene, camera);
+            };
+            animate();
+        }, undefined, (error) => {
+            console.error('An error occurred loading the 3D model:', error);
+        });
+
+        // Camera position
+        camera.position.z = 5;
+
+        // Resize handling
+        window.addEventListener('resize', () => {
+            const width = viewerContainer.offsetWidth;
+            renderer.setSize(width, 500);
+            camera.aspect = width / 500;
+            camera.updateProjectionMatrix();
+        });
+    </script>
+</body>
+</html>
